@@ -536,10 +536,12 @@ std::vector<at::Tensor> ds_softmax_context(at::Tensor& query_key_value,
                                1);
 
     if (layer_id == num_layers - 1) InferenceContext::Instance().advance_tokens();
+    
+
     auto prev_key = torch::from_blob(workspace + offset,
                                      {bsz, heads, all_tokens, k},
-    {static_cast<long>(hidden_dim * InferenceContext::Instance().GetMaxTokenLength()),
-    static_cast<long>(k * InferenceContext::Instance().GetMaxTokenLength()),
+                                     {static_cast<long>hidden_dim * InferenceContext::Instance().GetMaxTokenLength(),
+                                      static_cast<long>k * InferenceContext::Instance().GetMaxTokenLength(),
                                       k,
                                       1},
                                      options);
