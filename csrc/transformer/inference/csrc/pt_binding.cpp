@@ -538,8 +538,8 @@ std::vector<at::Tensor> ds_softmax_context(at::Tensor& query_key_value,
     if (layer_id == num_layers - 1) InferenceContext::Instance().advance_tokens();
     auto prev_key = torch::from_blob(workspace + offset,
                                      {bsz, heads, all_tokens, k},
-                                     {static_cast<long>(hidden_dim * InferenceContext::Instance().GetMaxTokenLength())},
-    {static_cast<long>(k * InferenceContext::Instance().GetMaxTokenLength())},
+                                     static_cast<long>(hidden_dim * InferenceContext::Instance().GetMaxTokenLength()),
+    static_cast<long>(k * InferenceContext::Instance().GetMaxTokenLength()),
                                       k,
                                       1},
                                      options);
@@ -547,8 +547,8 @@ std::vector<at::Tensor> ds_softmax_context(at::Tensor& query_key_value,
     auto prev_value =
         torch::from_blob(workspace + offset + value_offset,
                          {bsz, heads, all_tokens, k},
-                         {static_cast<long>(hidden_dim * InferenceContext::Instance().GetMaxTokenLength())},
-    {static_cast<long>(k * InferenceContext::Instance().GetMaxTokenLength())},
+                         static_cast<long>(hidden_dim * InferenceContext::Instance().GetMaxTokenLength()),
+    static_cast<long>(k * InferenceContext::Instance().GetMaxTokenLength()),
                           k,
                           1},
                          options);
@@ -1578,7 +1578,7 @@ std::vector<at::Tensor> ds_rms_mlp_gemm(at::Tensor& input,
     auto output = at::from_blob(output_ptr, input.sizes(), options);
     auto inp_norm = at::from_blob(inp_norm_ptr, input.sizes(), options);
     auto intermediate_gemm =
-        at::from_blob(intermediate_ptr, {input.size(0), input.size(1), {static_cast<long>(mlp_1_out_neurons)}}, options);
+        at::from_blob(intermediate_ptr, {input.size(0), input.size(1), static_cast<long>(mlp_1_out_neurons)}, options);
 
     auto act_func_type = static_cast<ActivationFuncType>(activation_type);
 
